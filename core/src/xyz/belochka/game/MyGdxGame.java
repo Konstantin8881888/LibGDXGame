@@ -1,31 +1,49 @@
 package xyz.belochka.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MyGdxGame extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
+	private SpriteBatch batch;
+	private Tank tank;
+	private Bullet bullet;
+
+	public Bullet getBullet() {
+		return bullet;
+	}
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		tank = new Tank(this);
+		bullet = new Bullet();
 	}
 
 	@Override
 	public void render () {
+		float dt = Gdx.graphics.getDeltaTime();
+		update(dt);
 		ScreenUtils.clear(1, 0, 0, 1);
 		batch.begin();
-		batch.draw(img, 0, 0);
+		tank.render(batch);
+		if (bullet.isActive()){
+			bullet.render(batch);
+		}
 		batch.end();
+	}
+
+	public void update(float dt){
+		tank.update(dt);
+		if (bullet.isActive()){
+			bullet.update(dt);
+		}
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
 	}
 }
